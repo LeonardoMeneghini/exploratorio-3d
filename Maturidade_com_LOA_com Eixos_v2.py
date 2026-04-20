@@ -1,76 +1,50 @@
-# Maturidade com LOA 3D
+# Rotina para Representação tridimensional  de 3 indicadores
+
+# Importando as bilbiotecas/pacotes
 import pandas as pd
 import plotly.express as px
 
-# Mapeamento de Sigla -> Eixo (baseado em eixos_do_mapa.csv)
+# Mapeamento  as siglas das UTs -> Eixo: necessário arquivo .CSV com secretaria/órgão e seu respecitvo eixo estratégico
 eixo_por_sigla = {
-    'DCPA':     'Cidade e Ambiente',
-    'DMAE':     'Cidade e Ambiente',
-    'DMLU':     'Cidade e Ambiente',
-    'EPTC':     'Cidade e Ambiente',
-    'SMMU':     'Cidade e Ambiente',
-    'SMOI':     'Cidade e Ambiente',
-    'SMSURB':   'Cidade e Ambiente',
-    'SMAMUS':   'Cidade e Ambiente',
-    'DEMHAB':   'Pessoas e Sociedade',
-    'GCA':      'Pessoas e Sociedade',
-    'GPD':      'Pessoas e Sociedade',
-    'SMIDH':    'Pessoas e Sociedade',
-    'SMS':      'Pessoas e Sociedade',
-    'SMAS':     'Pessoas e Sociedade',
-    'SMED':     'Pessoas e Sociedade',
-    'SMEL':     'Pessoas e Sociedade',
-    'SMSEG':    'Pessoas e Sociedade',
-    'GI':       'Economia e Inovação',
-    'SMC':      'Economia e Inovação',
-    'SMDETE':   'Economia e Inovação',
-    'PREVIMPA': 'Gestão Inteligente',
-    'PROCEMPA': 'Gestão Inteligente',
-    'GCS':      'Gestão Inteligente',
-    'GP/GVP':   'Gestão Inteligente',
-    'PGM':      'Gestão Inteligente',
-    'SMF':      'Gestão Inteligente',
-    'SMAP':     'Gestão Inteligente',
-    'SMGOV':    'Gestão Inteligente',
-    'SMP':      'Gestão Inteligente',
-    'SMPG':     'Gestão Inteligente',
-    'SMTC':     'Gestão Inteligente',
-    'SMGG':     'Gestão Inteligente',
+    'Sigla da Secretaria 1':  'Nome do Eixo Estratégico 1',
+    'Sigla da Secretaria  2': 'Nome do Eixo Estratégico 3',
+    'Sigla da Secretaria 3':  'Nome do Eixo Estratégico 2',
+    'Sigla da Secretaria 4':  'Nome do Eixo Estratégico 2',
 }
 
 # Ordem e cores dos grupos por eixo temático
 ordem_legenda = [
-    'Cidade e Ambiente',
-    'Pessoas e Sociedade',
-    'Economia e Inovação',
-    'Gestão Inteligente',
+    'Nome do Eixo Estratégico 1',
+    'Nome do Eixo Estratégico 2',
+    'Nome do Eixo Estratégico 3',
+    'Nome do Eixo Estratégico 4',
     'Sem Associação',
 ]
 
 cores = {
-    'Cidade e Ambiente':   '#1f77b4',  # Azul
-    'Pessoas e Sociedade': '#ff7f0e',  # Laranja
-    'Economia e Inovação': '#2ca02c',  # Verde
-    'Gestão Inteligente':  '#9467bd',  # Roxo
+    'Nome do Eixo Estratégico 1':   '#1f77b4',  # Azul
+    'Nome do Eixo Estratégico 2': '#ff7f0e',  # Laranja
+    'Nome do Eixo Estratégico 3': '#2ca02c',  # Verde
+    'Nome do Eixo Estratégico 4':  '#9467bd',  # Roxo
     'Sem Associação':      '#ffffff',  # Branco
 }
 
-# Ler dados
-df = pd.read_csv('maturidade-com-loa-inteiros.csv')
+# Ler dados de plotagem
+df = pd.read_csv('nome do arquivo exportado do BI com dados maturidade.csv')
 df.columns = df.columns.str.strip()
 
 # Classificar cada UT pelo eixo temático
 def definir_grupo(ut):
     return eixo_por_sigla.get(ut, 'Sem Associação')
 
-df['grupo'] = df['UT_EntreParenteses'].apply(definir_grupo)
+df['grupo'] = df['Coluna do CSV com nome da Secretaria'].apply(definir_grupo)
 
 # Criar gráfico
 fig = px.scatter_3d(
     df,
-    x='3_Orcamento_p',
-    y='LOA_p',
-    z='MM',
+    x='Coluna com a Resposta 1',
+    y='Coluna com a Resposta 2',
+    z='Coluna com a Resposta 3',
     color='grupo',
     category_orders={'grupo': ordem_legenda},
     color_discrete_map=cores,
@@ -81,9 +55,9 @@ fig = px.scatter_3d(
 # Ajustar nomes dos eixos
 fig.update_layout(
     scene=dict(
-        xaxis_title='Maturidade - D. Orçamento (%)',
-        yaxis_title='LOA (%)',
-        zaxis_title='Maturidade Média (%)'
+        xaxis_title='Título da Resposta 1 no eixo X',
+        yaxis_title='Título da Resposta 2 no eixo Y',
+        zaxis_title='Título da Resposta 3 no eixo Z'
     )
 )
 
@@ -95,10 +69,10 @@ fig.update_traces(
 # Descrição (legenda explicativa)
 descricao = """
 <b>Legenda dos Eixos Temáticos:</b><br>
-🔵 Cidade e Ambiente: DCPA, DMAE, DMLU, EPTC, SMMU, SMOI, SMSURB, SMAMUS<br>
-🟠 Pessoas e Sociedade: DEMHAB, GCA, GPD, SMIDH, SMS, SMAS, SMED, SMEL, SMSEG<br>
-🟢 Economia e Inovação: GI, SMC, SMDETE<br>
-🟣 Gestão Inteligente: PREVIMPA, PROCEMPA, GCS, GP/GVP, PGM, SMF, SMAP, SMGOV, SMP, SMPG, SMTC, SMGG<br>
+🔵 Nome do Eixo Estratégico 1: Secretaria 1, Secreatira 2<br>
+🟠 Nome do Eixo Estratégico 2: Secreatira 3, Secreatira 4<br>
+🟢 Nome do Eixo Estratégico 3: Secreatira 5, Secreatira 6<br>
+🟣 Nome do Eixo Estratégico 4: Secreatira 7, Secreatira 8<br>
 ⚪ Sem Associação
 """
 
@@ -120,6 +94,6 @@ fig.update_layout(
 )
 
 # Salvar
-fig.write_html('dashboard_3d_interativo_v4.html')
+fig.write_html('nome do arquivo do gráfico.html')
 
 fig.show()
